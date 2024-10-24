@@ -7,6 +7,7 @@ use crate::state::Escrow;
 #[derive(Accounts)]
 #[instruction(seed: u64)]
 pub struct Make<'info> {
+    #[account(mut)]
     pub maker: Signer<'info>,
     pub mint_a: InterfaceAccount<'info, Mint>,
     pub mint_b: InterfaceAccount<'info, Mint>,
@@ -21,7 +22,7 @@ pub struct Make<'info> {
     #[account(
         init,
         payer = maker,
-        seeds = [b'escrow', maker.key().as_ref(), seed.to_le_bytes().as_ref()],
+        seeds = [b"escrow", maker.key().as_ref(), seed.to_le_bytes().as_ref()],
         bump,
         space = 8 + Escrow::INIT_SPACE,
     )]
@@ -41,19 +42,19 @@ pub struct Make<'info> {
 }
 
 impl<'info> Make<'info> {
-    pub fn init_escrow(&mut self, seed: u64, receive: u64) -> Result<()> {
+    pub fn init_escrow(&mut self, seed: u64, receive: u64, bumps: &MakeBumps) -> Result<()> {
         self.escrow.set_inner(Escrow {
             seed,
             maker: self.maker.key(),
             mint_a: self.mint_a.key(),
             mint_b: self.mint_a.key(),
             receive,
-            bump: 12,
+            bump: bumps.escrow,
         });
         Ok(())
     }
 
-    pub fn deposit(&mut self, deposit: u64) -> Result<()> {
+    pub fn deposit(&mut self, deposit: u64, bumps: &MakeBumps) -> Result<()> {
         let cpi_program = self.token_program.to_account_info();
         let cpi_accounts = TransferChecked {
             from: self.maker_ata_a.to_account_info(),
