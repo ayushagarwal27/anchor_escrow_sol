@@ -54,7 +54,7 @@ impl<'info> Make<'info> {
         Ok(())
     }
 
-    pub fn deposit(&mut self, deposit: u64, bumps: &MakeBumps) -> Result<()> {
+    pub fn deposit(&mut self, deposit: u64) -> Result<()> {
         let cpi_program = self.token_program.to_account_info();
         let cpi_accounts = TransferChecked {
             from: self.maker_ata_a.to_account_info(),
