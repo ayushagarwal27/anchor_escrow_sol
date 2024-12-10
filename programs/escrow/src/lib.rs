@@ -7,8 +7,8 @@ mod instructions;
 
 use instructions::*;
 
-// #[program]
-pub mod escrow_program {
+#[program]
+pub mod escrow {
     use super::*;
 
     pub fn make(ctx: Context<Make>, seed: u64, deposit: u64, receive: u64) -> Result<()> {
