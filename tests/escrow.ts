@@ -5,6 +5,7 @@ import { randomBytes } from "crypto";
 import {
   createMint,
   getAssociatedTokenAddress,
+  getAssociatedTokenAddressSync,
   getOrCreateAssociatedTokenAccount,
   mintTo,
   TOKEN_PROGRAM_ID,
@@ -132,213 +133,82 @@ describe("Make and Refund", () => {
     );
     expect(makerAtaBalanceA).to.equal(initialMakerAtaABalance);
   });
-  //   const
-  //   // @ts-ignore
-  //   const vault = getAssociatedTokenAddress(mintA, escrow, true);
-  //
-  //   it("Airdrops SOL to maker and taker", async () => {
-  //     const latestBlockHash = await provider.connection.getLatestBlockhash();
-  //     const tx = await provider.connection.requestAirdrop(
-  //       maker.publicKey,
-  //       1000000000
-  //     );
-  //
-  //     await provider.connection.confirmTransaction({
-  //       signature: tx,
-  //       lastValidBlockHeight: latestBlockHash.lastValidBlockHeight,
-  //       blockhash: latestBlockHash.blockhash,
-  //     });
-  //
-  //     console.log(
-  //       "Maker Balance: ",
-  //       await provider.connection.getBalance(maker.publicKey)
-  //     );
-  //     const tx1 = await provider.connection.requestAirdrop(
-  //       taker.publicKey,
-  //       1000000000
-  //     );
-  //     await provider.connection.confirmTransaction({
-  //       signature: tx1,
-  //       lastValidBlockHeight: latestBlockHash.lastValidBlockHeight,
-  //       blockhash: latestBlockHash.blockhash,
-  //     });
-  //
-  //     console.log(
-  //       "Taker Balance: ",
-  //       await provider.connection.getBalance(taker.publicKey)
-  //     );
-  //   });
-  //
-  //   it("Create Tokens and Mints Tokens", async () => {
-  //     // @ts-ignore
-  //     mintA = await createMint(
-  //       provider.connection,
-  //       wallet.payer,
-  //       provider.publicKey,
-  //       provider.publicKey,
-  //       6
-  //     );
-  //
-  //     // @ts-ignore
-  //     console.log("Mint A: ", mintA.toBase58());
-  //
-  //     // @ts-ignore
-  //     mintB = await createMint(
-  //       provider.connection,
-  //       wallet.payer,
-  //       provider.publicKey,
-  //       provider.publicKey,
-  //       6
-  //     );
-  //
-  //     // @ts-ignore
-  //     console.log("Mint B: ", mintB.toBase58());
-  //
-  //     // @ts-ignore
-  //     // @ts-ignore
-  //     makerAtaB = (
-  //       await getOrCreateAssociatedTokenAccount(
-  //         provider.connection,
-  //         wallet.payer,
-  //         // @ts-ignore
-  //         mintB,
-  //         maker.publicKey
-  //       )
-  //     ).address;
-  //
-  //     // @ts-ignore
-  //     takerAtaA = (
-  //       await getOrCreateAssociatedTokenAccount(
-  //         provider.connection,
-  //         wallet.payer,
-  //         // @ts-ignore
-  //         mintA,
-  //         taker.publicKey
-  //       )
-  //     ).address;
-  //     // @ts-ignore
-  //     takerAtaB = (
-  //       await getOrCreateAssociatedTokenAccount(
-  //         provider.connection,
-  //         wallet.payer,
-  //         // @ts-ignore
-  //         mintB,
-  //         taker.publicKey
-  //       )
-  //     ).address;
-  //
-  //     await mintTo(
-  //       provider.connection,
-  //       wallet.payer,
-  //       // @ts-ignore
-  //       mintA,
-  //       makerAtaA,
-  //       provider.publicKey,
-  //       1_000_000_0
-  //     );
-  //     await mintTo(
-  //       provider.connection,
-  //       wallet.payer,
-  //       // @ts-ignore
-  //       mintB,
-  //       makerAtaB,
-  //       provider.publicKey,
-  //       1_000_000_0
-  //     );
-  //
-  //     await mintTo(
-  //       provider.connection,
-  //       wallet.payer,
-  //       // @ts-ignore
-  //       mintA,
-  //       takerAtaA,
-  //       provider.publicKey,
-  //       1_000_000_0
-  //     );
-  //     await mintTo(
-  //       provider.connection,
-  //       wallet.payer,
-  //       // @ts-ignore
-  //       mintB,
-  //       takerAtaB,
-  //       provider.publicKey,
-  //       1_000_000_0
-  //     );
-  //   });
-  //
-  //   // it("Refund and Close Escrow", async () => {
-  //   //   // Add your test here.
-  //   //   const tx = await program.methods
-  //   //     .refund()
-  //   //     .accountsPartial({
-  //   //       maker: maker.publicKey,
-  //   //       // @ts-ignore
-  //   //       mintA,
-  //   //       // @ts-ignore
-  //   //       makerAtaA,
-  //   //       escrow,
-  //   //       // @ts-ignore
-  //   //       vault,
-  //   //       tokenProgram: TOKEN_PROGRAM_ID,
-  //   //       systemProgram: anchor.web3.SystemProgram.programId,
-  //   //     })
-  //   //     .signers([maker])
-  //   //     .rpc();
-  //   //   console.log("Your transaction signature: ", tx);
-  //   // });
-  //
-  //   it("Make Escrow Account", async () => {
-  //     // Add your test here.
-  //     const tx = await program.methods
-  //       .make(seed, new anchor.BN(1_000_000), new anchor.BN(1_000_000))
-  //       .accountsPartial({
-  //         maker: maker.publicKey,
-  //         // @ts-ignore
-  //         mintA,
-  //         // @ts-ignore
-  //         mintB,
-  //         // @ts-ignore
-  //         makerAtaA,
-  //         escrow,
-  //         // @ts-ignore
-  //         vault,
-  //         associatedTokenProgram: ASSOCIATED_PROGRAM_ID,
-  //         tokenProgram: TOKEN_PROGRAM_ID,
-  //         systemProgram: anchor.web3.SystemProgram.programId,
-  //       })
-  //       .signers([maker])
-  //       .rpc();
-  //     console.log("Your transaction signature: ", tx);
-  //   });
-  //
-  //   it("Take and Close Escrow", async () => {
-  //     // @ts-ignore
-  //
-  //     // Add your test here.
-  //     const tx = await program.methods
-  //       .take()
-  //       .accountsPartial({
-  //         maker: maker.publicKey,
-  //         taker: taker.publicKey,
-  //         // @ts-ignore
-  //         mintA,
-  //         // @ts-ignore
-  //         mintB,
-  //         // @ts-ignore
-  //         makerAtaA,
-  //         // @ts-ignore
-  //         takerAtaA,
-  //         // @ts-ignore
-  //         takerAtaB,
-  //         escrow,
-  //         // @ts-ignore
-  //         vault,
-  //         associatedTokenProgram: ASSOCIATED_PROGRAM_ID,
-  //         tokenProgram: TOKEN_PROGRAM_ID,
-  //         systemProgram: anchor.web3.SystemProgram.programId,
-  //       })
-  //       .signers([taker])
-  //       .rpc({ skipPreflight: true });
-  //     console.log("Your transaction signature: ", tx);
-  //   });
+});
+
+describe("Make and Take", () => {
+  let takerAtaB: anchor.web3.PublicKey;
+
+  before(async () => {
+    await commonSetup();
+    takerAtaB = (
+      await getOrCreateAssociatedTokenAccount(
+        provider.connection,
+        maker.payer,
+        mintB,
+        taker.publicKey
+      )
+    ).address;
+
+    await mintTo(
+      connection,
+      maker.payer,
+      mintB,
+      takerAtaB,
+      maker.payer,
+      initialTakerAtaBBalance
+    );
+  });
+
+  it("Init escrow and deposit", async () => {
+    const tx = await program.methods
+      .make(seed, new anchor.BN(deposit), new anchor.BN(receiveAmount))
+      .accounts({
+        maker: maker.publicKey,
+        mintA,
+        mintB,
+        tokenProgram: TOKEN_PROGRAM_ID,
+      })
+      .signers([maker.payer])
+      .rpc();
+    console.log("Your transaction signature: ", tx);
+
+    const vaultBalance = Number(
+      (await connection.getTokenAccountBalance(vault)).value.amount
+    );
+
+    const makerAtaBalance = Number(
+      (await connection.getTokenAccountBalance(makerAtaA)).value.amount
+    );
+    expect(vaultBalance).to.equal(deposit);
+    expect(makerAtaBalance).to.equal(initialMakerAtaABalance - deposit);
+  });
+
+  it("Take and Close Vault", async () => {
+    await program.methods
+      .take()
+      .accounts({ taker: taker.publicKey, tokenProgram: TOKEN_PROGRAM_ID })
+      .accountsPartial({
+        maker: maker.publicKey,
+        mintA,
+        mintB,
+        escrow,
+      })
+      .signers([taker])
+      .rpc();
+
+    const makerAtaB = getAssociatedTokenAddressSync(mintB, maker.publicKey);
+    const makerAtaBBalance = Number(
+      (await connection.getTokenAccountBalance(makerAtaB)).value.amount
+    );
+    const takerAtaA = getAssociatedTokenAddressSync(mintA, taker.publicKey);
+    const takerAtaABalance = Number(
+      (await connection.getTokenAccountBalance(takerAtaA)).value.amount
+    );
+    const takerAtaBBalance = Number(
+      (await connection.getTokenAccountBalance(takerAtaB)).value.amount
+    );
+    expect(makerAtaBBalance).to.equal(receiveAmount);
+    expect(takerAtaABalance).to.equal(deposit);
+    expect(takerAtaBBalance).to.equal(initialTakerAtaBBalance - receiveAmount);
+  });
 });
