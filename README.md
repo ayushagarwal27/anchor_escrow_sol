@@ -1,6 +1,6 @@
 ### Escrow Program
 
->A Solana program for holding funds until a condition is met for achieving a trustless conditional transfer.
+A Solana program for holding funds until a condition is met for achieving a trustless conditional transfer.
 
 #### Make Instruction
 
